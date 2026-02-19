@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using ProjectPlan.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore;
@@ -22,7 +20,7 @@ public partial class ProjectViewModel : ViewModelBase
         UpdateProject();
     }
 
-    async private void UpdateProject()
+    private async void UpdateProject()
     {
         try
         {
