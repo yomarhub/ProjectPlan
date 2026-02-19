@@ -1,5 +1,6 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:m="using:ProjectPlan.Models"
              xmlns:vm="using:ProjectPlan.ViewModels"
              x:Class="ProjectPlan.Views.ProjectView"
              x:DataType="vm:ProjectViewModel">
@@ -9,6 +10,34 @@
       <TextBlock FontWeight="Bold" Text="{Binding ProjectName}" />
       <TextBlock Text="{Binding Hint}"/>
       <TextBox Watermark="Nom du projet" />
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+        <ItemsControl ItemsSource="{Binding Columns}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <StackPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="m:Column">
+              <Border BorderBrush="Gray" BorderThickness="1" Padding="8" Margin="4">
+                <StackPanel>
+                  <TextBlock FontWeight="Bold" Text="{Binding Name}" Margin="0,0,0,8"/>
+                  <ItemsControl ItemsSource="{Binding Cards}">
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate x:DataType="m:Card">
+                        <Border BorderBrush="LightGray" BorderThickness="1" Padding="4" Margin="0,0,0,4">
+                          <TextBlock Text="{Binding Title}" />
+                        </Border>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
     </StackPanel>
   </Border>
 </UserControl>
