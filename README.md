@@ -21,22 +21,22 @@ To Complete
 > Lien vers la maquette complète.
 > **[Voir la maquette sur Figma](https://www.figma.com/design/ihkBEva17vLyZCR2WKLMkK/ProjectPlan?node-id=0-1&t=20UBtoOh2cq15HFe-1)**
 
-![Wireframe](assets/figma.png)
+![Wireframe](Assets/figma.png)
 
 ### Organisation du projet
 
 > Lien vers le Trello : **[Voir le Trello](https://trello.com/invite/b/69959b8491d6cf68c640930f/ATTIa3e1e817efe85e846b0e7cec603c56c42ACFDFCD/projectplan)**
 
-![Trello](assets/trello.png)
+![Trello](Assets/trello.png)
 
 ## Architecture & UML
 
 
-![DB UML](assets/mermaid.png)
+![DB UML](Assets/mermaid.png)
 
 Mermaid code :
 
-```plantuml
+```mermaid
 erDiagram
     direction RL
     Card ||--o{ Column : references
