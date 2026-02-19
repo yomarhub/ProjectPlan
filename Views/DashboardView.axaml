@@ -37,35 +37,52 @@
     </ControlTheme>
   </UserControl.Resources>
 
+  <UserControl.DataTemplates>
+    <DataTemplate x:DataType="vm:DashboardProjectCard">
+      <Button Width="240"
+              Margin="0,0,12,12"
+              Padding="12"
+              Theme="{StaticResource DashboardCardButtonTheme}"
+              x:CompileBindings="False"
+              Command="{Binding DataContext.OpenProjectFromCardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+              CommandParameter="{Binding .}">
+        <StackPanel Spacing="8">
+          <Image Height="120" Source="{Binding Image}" Stretch="Uniform" HorizontalAlignment="Center" />
+          <Separator />
+          <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding Title}" TextAlignment="Center" />
+          <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Button>
+    </DataTemplate>
+
+    <DataTemplate x:DataType="vm:DashboardAddCard">
+      <Button Width="240"
+              Margin="0,0,12,12"
+              Padding="12"
+              Theme="{StaticResource DashboardCardButtonTheme}"
+              x:CompileBindings="False"
+              Click="AddProject_Click">
+        <Grid Height="160">
+          <TextBlock Text="+"
+                     FontSize="48"
+                     FontWeight="Bold"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center" />
+        </Grid>
+      </Button>
+    </DataTemplate>
+  </UserControl.DataTemplates>
+
   <Border Padding="16">
     <StackPanel Spacing="10">
       <TextBlock FontSize="22" FontWeight="Bold" Text="{Binding Title}"/>
       <ScrollViewer HorizontalScrollBarVisibility="Disabled">
-        <ItemsControl ItemsSource="{Binding Cards}">
+        <ItemsControl ItemsSource="{Binding Tiles}">
           <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
               <WrapPanel Orientation="Horizontal" />
             </ItemsPanelTemplate>
           </ItemsControl.ItemsPanel>
-
-          <ItemsControl.ItemTemplate>
-            <DataTemplate x:DataType="vm:DashboardCard">
-              <Button Width="240"
-                      Margin="0,0,12,12"
-                      Padding="12"
-                      Theme="{StaticResource DashboardCardButtonTheme}"
-                      x:CompileBindings="False"
-                      Command="{Binding DataContext.OpenProjectFromCardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                      CommandParameter="{Binding .}">
-                <StackPanel Spacing="8">
-                  <Image Height="120" Source="{Binding Image}" Stretch="Uniform" HorizontalAlignment="Center" />
-                  <Separator />
-                  <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding Title}" TextAlignment="Center" />
-                  <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
-                </StackPanel>
-              </Button>
-            </DataTemplate>
-          </ItemsControl.ItemTemplate>
         </ItemsControl>
       </ScrollViewer>
     </StackPanel>

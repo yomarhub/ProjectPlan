@@ -7,8 +7,10 @@
     <StackPanel Spacing="10">
       <TextBlock FontSize="22" FontWeight="Bold" Text="{Binding Title}"/>
       <TextBlock FontWeight="Bold" Text="{Binding ProjectName}" />
+      <Image Height="180" Source="{Binding ProjectImage}" Stretch="Uniform" />
+      <TextBlock Text="{Binding ProjectDescription}" TextWrapping="Wrap" />
       <TextBlock Text="{Binding Hint}"/>
-      <TextBox Watermark="Nom du projet" />
+      <TextBox Text="{Binding ProjectName}" Watermark="Nom du projet" />
     </StackPanel>
   </Border>
 </UserControl>
