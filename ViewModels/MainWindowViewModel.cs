@@ -27,7 +27,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private void OpenProjectFromCard(DashboardCard card)
     {
-        _project.ProjectName = card.Title;
+        _project.ProjectId = card.Id;
         CurrentPage = _project;
     }
 

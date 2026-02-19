@@ -8,8 +8,9 @@ using Avalonia.Platform;
 
 namespace ProjectPlan.ViewModels;
 
-public sealed class DashboardCard(IImage image, string title, string? description)
+public sealed class DashboardCard(int id, IImage image, string title, string? description)
 {
+    public int Id { get; } = id;
     public IImage Image { get; } = image;
     public string Title { get; } = title;
     public string? Description { get; } = description;
@@ -19,8 +20,9 @@ public class DashboardViewModel : ViewModelBase
 {
     public string Title { get; } = "Dashboard";
 
-    private static IImage LoadImageOrFallback(string? assetUri, IImage fallback)
+    private static IImage LoadImageOrFallback(string? assetUri, IImage? fallback = null)
     {
+        fallback ??= DefaultCardImage;
         try
         {
             if (string.IsNullOrEmpty(assetUri))
@@ -50,7 +52,8 @@ public class DashboardViewModel : ViewModelBase
     public DashboardViewModel()
     {
         Cards = Context.Projects.Select(project => new DashboardCard(
-            LoadImageOrFallback(project.Thumbnail, DefaultCardImage),
+            project.Id,
+            LoadImageOrFallback(project.Thumbnail),
             project.Name,
             project.Description)).ToList();
     }
