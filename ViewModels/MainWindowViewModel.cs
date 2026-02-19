@@ -10,6 +10,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly ProjectViewModel _project = new();
     private readonly SettingsViewModel _settings = new();
 
+    private int _newProjectIndex = 1;
+
     [ObservableProperty]
     private ViewModelBase _currentPage;
 
@@ -25,9 +27,30 @@ public partial class MainWindowViewModel : ViewModelBase
     private void ShowProject() => CurrentPage = _project;
 
     [RelayCommand]
-    private void OpenProjectFromCard(DashboardCard card)
+    private void OpenProjectFromCard(DashboardProjectCard card)
     {
         _project.ProjectName = card.Title;
+        CurrentPage = _project;
+    }
+
+    [RelayCommand]
+    private void CreateNewProject()
+    {
+        _project.ProjectName = $"Nouveau projet {_newProjectIndex++}";
+        _project.ProjectDescription = string.Empty;
+        _project.ProjectImage = null;
+        CurrentPage = _project;
+    }
+
+    public void CreateNewProject(CreateProjectResult result)
+    {
+        var title = string.IsNullOrWhiteSpace(result.Title)
+            ? $"Nouveau projet {_newProjectIndex++}"
+            : result.Title.Trim();
+
+        _project.ProjectName = title;
+        _project.ProjectDescription = result.Description?.Trim() ?? string.Empty;
+        _project.ProjectImage = result.Image;
         CurrentPage = _project;
     }
 
