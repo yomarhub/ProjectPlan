@@ -4,6 +4,8 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using MsBox.Avalonia;
+using ProjectPlan.Models;
 using ProjectPlan.ViewModels;
 using ProjectPlan.Views;
 
@@ -27,6 +29,8 @@ public partial class App : Application
             {
                 DataContext = new MainWindowViewModel(),
             };
+            Context.EnsureDatabaseCreated().ContinueWith(task =>
+                MessageBoxManager.GetMessageBoxStandard("info", $"Database created: {task.Result}"));
         }
 
         base.OnFrameworkInitializationCompleted();
