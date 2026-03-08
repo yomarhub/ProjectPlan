@@ -1,0 +1,90 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:ProjectPlan.ViewModels"
+             x:Class="ProjectPlan.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+  <UserControl.Resources>
+    <ControlTheme x:Key="DashboardCardButtonTheme" TargetType="Button">
+      <Setter Property="Background" Value="#FFFFFF" />
+      <Setter Property="Cursor" Value="Hand" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border
+            Background="{TemplateBinding Background}"
+            BorderThickness="{TemplateBinding BorderThickness}"
+            CornerRadius="{TemplateBinding CornerRadius}"
+            RenderTransformOrigin="0.5,0.5">
+            <Border.Transitions>
+              <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.2" />
+              </Transitions>
+            </Border.Transitions>
+            <ContentPresenter
+              Content="{TemplateBinding Content}"
+              ContentTemplate="{TemplateBinding ContentTemplate}"
+              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+              Padding="{TemplateBinding Padding}" />
+          </Border>
+        </ControlTemplate>
+      </Setter>
+
+      <Style Selector="^:pointerover /template/ Border">
+        <Setter Property="Background" Value="#DBDBDB" />
+      </Style>
+    </ControlTheme>
+  </UserControl.Resources>
+
+  <UserControl.DataTemplates>
+    <DataTemplate x:DataType="vm:DashboardProjectCard">
+      <Button Width="240"
+              Margin="0,0,12,12"
+              Padding="12"
+              Theme="{StaticResource DashboardCardButtonTheme}"
+              x:CompileBindings="False"
+              Command="{Binding DataContext.OpenProjectFromCardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+              CommandParameter="{Binding .}">
+        <StackPanel Spacing="8">
+          <Image Height="120" Source="{Binding Image}" Stretch="Uniform" HorizontalAlignment="Center" />
+          <Separator />
+          <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding Title}" TextAlignment="Center" />
+          <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Button>
+    </DataTemplate>
+
+    <DataTemplate x:DataType="vm:DashboardAddCard">
+      <Button Width="240"
+              Margin="0,0,12,12"
+              Padding="12"
+              Theme="{StaticResource DashboardCardButtonTheme}"
+              x:CompileBindings="False"
+              Click="AddProject_Click">
+        <Grid Height="160">
+          <TextBlock Text="+"
+                     FontSize="48"
+                     FontWeight="Bold"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center" />
+        </Grid>
+      </Button>
+    </DataTemplate>
+  </UserControl.DataTemplates>
+
+  <Border Padding="16">
+    <StackPanel Spacing="10">
+      <TextBlock FontSize="22" FontWeight="Bold" Text="{Binding Title}"/>
+      <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+        <ItemsControl ItemsSource="{Binding Tiles}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <WrapPanel Orientation="Horizontal" />
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+        </ItemsControl>
+      </ScrollViewer>
+    </StackPanel>
+  </Border>
+</UserControl>

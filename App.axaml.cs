@@ -4,6 +4,7 @@ using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
 using Avalonia.Markup.Xaml;
+using MsBox.Avalonia;
 using ProjectPlan.ViewModels;
 using ProjectPlan.Views;
 
@@ -23,16 +24,32 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
+            var mainVm = new MainWindowViewModel();
+            desktop.MainWindow = new MainWindow { DataContext = mainVm };
+
+            _ = InitializeAsync(mainVm);
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void DisableAvaloniaDataAnnotationValidation()
+    private static async System.Threading.Tasks.Task InitializeAsync(MainWindowViewModel mainVm)
+    {
+        try
+        {
+            await mainVm.InitializeAsync();
+        }
+        catch (System.Exception ex)
+        {
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                "Erreur",
+                "Impossible d'initialiser la base de données.\n\n" + ex.Message);
+
+            await box.ShowAsync();
+        }
+    }
+
+    private static void DisableAvaloniaDataAnnotationValidation()
     {
         // Get an array of plugins to remove
         var dataValidationPluginsToRemove =
