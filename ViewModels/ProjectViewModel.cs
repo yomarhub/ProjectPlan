@@ -14,6 +14,7 @@ public partial class ProjectViewModel : ViewModelBase
     [ObservableProperty] private string _hint = "Ici tu mettras le contenu de tes projets.";
     [ObservableProperty] private string _projectName = "(aucun projet sélectionné)";
     [ObservableProperty] private List<Column> _columns = new();
+    [ObservableProperty] private int _columnWidth = 800;
 
     partial void OnProjectIdChanged(int value)
     {
@@ -34,9 +35,9 @@ public partial class ProjectViewModel : ViewModelBase
             }
 
             Columns = (await Context.Projects
-                .Include(p => p.Columns)
-                .ThenInclude(c => c.Cards)
-                .FirstAsync(p => p.Id == ProjectId))
+                    .Include(p => p.Columns)
+                    .ThenInclude(c => c.Cards)
+                    .FirstAsync(p => p.Id == ProjectId))
                 .Columns.ToList();
         }
         catch (Exception e)

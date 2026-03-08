@@ -1,0 +1,26 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="using:ProjectPlan"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:m="clr-namespace:ProjectPlan.Models"
+             xmlns:vm="using:ProjectPlan.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="ProjectPlan.ColumnView"
+             x:DataType="m:Column">
+  <UserControl.DataTemplates>
+    <DataTemplate x:DataType="m:Card">
+      <local:CardView />
+    </DataTemplate>
+  </UserControl.DataTemplates>
+
+  <Border BorderBrush="Gray" BorderThickness="1" Padding="8" Margin="4">
+    <StackPanel>
+      <!-- <TextBlock Text="Test: " /> -->
+      <TextBlock x:DataType="vm:ProjectViewModel" Text="{Binding $parent[vm:ProjectViewModel].ColumnWidth, StringFormat='Test: %s', FallbackValue='Column Width Not Found'}" />
+      <!-- <TextBlock FontWeight="Bold" Width="{Binding $parent[vm:ProjectViewModel].ColumnWidth}" Text="{Binding Name}" Margin="0,0,0,8" /> -->
+      <ItemsControl ItemsSource="{Binding Cards}" />
+    </StackPanel>
+  </Border>
+</UserControl>
+
