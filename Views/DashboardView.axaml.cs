@@ -26,7 +26,7 @@ public partial class DashboardView : UserControl
         if (result is null)
             return;
 
-        mainVm.CreateNewProject(result);
+        await mainVm.CreateNewProjectAsync(result);
     }
 
     private void InitializeComponent()
