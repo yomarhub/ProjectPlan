@@ -3,13 +3,13 @@
         xmlns:vm="using:ProjectPlan.ViewModels"
         x:Class="ProjectPlan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Background="#EEF0F2">
+        Background="{DynamicResource AppBackgroundBrush}">
   <DockPanel>
-    <DockPanel DockPanel.Dock="Left" Width="64" Background="#FFFFFF" LastChildFill="False">
+    <DockPanel DockPanel.Dock="Left" Width="64" Background="{DynamicResource AppSurfaceBrush}" LastChildFill="False">
       <DockPanel.Resources>
         <ControlTheme x:Key="NavButtonTheme" TargetType="Button">
-          <Setter Property="Background" Value="#FFFFFF" />
-          <Setter Property="Foreground" Value="#31393C" />
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}" />
           <Setter Property="Cursor" Value="Hand" />
           <Setter Property="BorderThickness" Value="0" />
           <Setter Property="HorizontalAlignment" Value="Center" />
@@ -34,8 +34,8 @@
           </Setter>
 
           <Style Selector="^:pointerover">
-            <Setter Property="Background" Value="#DBDBDB" />
-            <Setter Property="Foreground" Value="#31393C" />
+            <Setter Property="Background" Value="{DynamicResource AppAccentTintBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}" />
           </Style>
         </ControlTheme>
       </DockPanel.Resources>

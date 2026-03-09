@@ -6,7 +6,7 @@
         Width="520"
         Height="520"
         CanResize="False"
-        Background="#EEF0F2"
+        Background="{DynamicResource AppBackgroundBrush}"
         Title="Modifier un projet">
 
   <Border Padding="16">
@@ -14,7 +14,7 @@
       <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="False">
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
           <Button Command="{Binding CancelCommand}">Annuler</Button>
-          <Button Command="{Binding SaveCommand}">Enregistrer</Button>
+          <Button Classes="primary" Command="{Binding SaveCommand}">Enregistrer</Button>
         </StackPanel>
       </DockPanel>
 
@@ -46,7 +46,7 @@
                          Text="{Binding ImagePath}" />
             </DockPanel>
 
-            <Border Background="#FFFFFF" BorderThickness="1" CornerRadius="8" Padding="8">
+            <Border Background="{DynamicResource AppSurfaceBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="8">
               <Image Height="160" Source="{Binding ImagePreview}" Stretch="Uniform" />
             </Border>
           </StackPanel>
