@@ -5,14 +5,16 @@
              x:DataType="vm:DashboardViewModel">
   <UserControl.Resources>
     <ControlTheme x:Key="DashboardCardButtonTheme" TargetType="Button">
-      <Setter Property="Background" Value="#FFFFFF" />
+      <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
       <Setter Property="Cursor" Value="Hand" />
       <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
       <Setter Property="CornerRadius" Value="8" />
       <Setter Property="Template">
         <ControlTemplate>
           <Border
             Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             CornerRadius="{TemplateBinding CornerRadius}"
             RenderTransformOrigin="0.5,0.5">
@@ -32,7 +34,8 @@
       </Setter>
 
       <Style Selector="^:pointerover /template/ Border">
-        <Setter Property="Background" Value="#DBDBDB" />
+        <Setter Property="Background" Value="{DynamicResource AppAccentTintBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
       </Style>
     </ControlTheme>
   </UserControl.Resources>

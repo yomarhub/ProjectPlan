@@ -5,12 +5,94 @@
              RequestedThemeVariant="Light">
     <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
+    <Application.Resources>
+        <!-- App palette (light) -->
+        <Color x:Key="AppAccentColor">#0E5BFF</Color>
+        <Color x:Key="AppAccentColorHover">#0B4FE6</Color>
+        <Color x:Key="AppAccentColorPressed">#0943C2</Color>
+        <Color x:Key="AppAccentTintColor">#E8F0FF</Color>
+
+        <Color x:Key="AppBackgroundColor">#EEF0F2</Color>
+        <Color x:Key="AppSurfaceColor">#FFFFFF</Color>
+        <Color x:Key="AppSurfaceAltColor">#EEF0F2</Color>
+        <Color x:Key="AppSurfaceHoverColor">#DBDBDB</Color>
+        <Color x:Key="AppBorderColor">#D0D5DD</Color>
+
+        <Color x:Key="AppTextColor">#31393C</Color>
+        <Color x:Key="AppTextMutedColor">#5B6475</Color>
+
+        <Color x:Key="AppDangerColor">#D92D20</Color>
+        <Color x:Key="AppDangerColorHover">#B42318</Color>
+        <Color x:Key="AppDangerColorPressed">#7A271A</Color>
+        <Color x:Key="AppDangerTintColor">#FEE4E2</Color>
+
+        <SolidColorBrush x:Key="AppAccentBrush" Color="{DynamicResource AppAccentColor}" />
+        <SolidColorBrush x:Key="AppAccentHoverBrush" Color="{DynamicResource AppAccentColorHover}" />
+        <SolidColorBrush x:Key="AppAccentPressedBrush" Color="{DynamicResource AppAccentColorPressed}" />
+        <SolidColorBrush x:Key="AppAccentTintBrush" Color="{DynamicResource AppAccentTintColor}" />
+
+        <SolidColorBrush x:Key="AppBackgroundBrush" Color="{DynamicResource AppBackgroundColor}" />
+        <SolidColorBrush x:Key="AppSurfaceBrush" Color="{DynamicResource AppSurfaceColor}" />
+        <SolidColorBrush x:Key="AppSurfaceAltBrush" Color="{DynamicResource AppSurfaceAltColor}" />
+        <SolidColorBrush x:Key="AppSurfaceHoverBrush" Color="{DynamicResource AppSurfaceHoverColor}" />
+        <SolidColorBrush x:Key="AppBorderBrush" Color="{DynamicResource AppBorderColor}" />
+        <SolidColorBrush x:Key="AppTextBrush" Color="{DynamicResource AppTextColor}" />
+        <SolidColorBrush x:Key="AppTextMutedBrush" Color="{DynamicResource AppTextMutedColor}" />
+
+        <SolidColorBrush x:Key="AppDangerBrush" Color="{DynamicResource AppDangerColor}" />
+        <SolidColorBrush x:Key="AppDangerHoverBrush" Color="{DynamicResource AppDangerColorHover}" />
+        <SolidColorBrush x:Key="AppDangerPressedBrush" Color="{DynamicResource AppDangerColorPressed}" />
+        <SolidColorBrush x:Key="AppDangerTintBrush" Color="{DynamicResource AppDangerTintColor}" />
+
+        <!-- Fluent accent override (used by FluentTheme controls) -->
+        <Color x:Key="SystemAccentColor">#0E5BFF</Color>
+        <SolidColorBrush x:Key="SystemControlHighlightAccentBrush" Color="{DynamicResource SystemAccentColor}" />
+    </Application.Resources>
+
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
     <Application.Styles>
         <FluentTheme />
+
+        <!-- Primary buttons (Enregistrer / Valider / Créer) -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="{DynamicResource AppAccentBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="{DynamicResource AppAccentHoverBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppAccentHoverBrush}" />
+        </Style>
+
+        <Style Selector="Button.primary:pressed">
+            <Setter Property="Background" Value="{DynamicResource AppAccentPressedBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppAccentPressedBrush}" />
+        </Style>
+
+        <!-- Destructive buttons (Suppression) -->
+        <Style Selector="Button.destructive">
+            <Setter Property="Background" Value="{DynamicResource AppDangerBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppDangerBrush}" />
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="8" />
+        </Style>
+
+        <Style Selector="Button.destructive:pointerover">
+            <Setter Property="Background" Value="{DynamicResource AppDangerHoverBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppDangerHoverBrush}" />
+        </Style>
+
+        <Style Selector="Button.destructive:pressed">
+            <Setter Property="Background" Value="{DynamicResource AppDangerPressedBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AppDangerPressedBrush}" />
+        </Style>
     </Application.Styles>
 
     <TrayIcon.Icons>

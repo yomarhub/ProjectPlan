@@ -9,14 +9,16 @@
     <infra:HasNextColumnConverter x:Key="HasNextColumnConverter" />
 
     <ControlTheme x:Key="DashboardLikeButtonTheme" TargetType="Button">
-      <Setter Property="Background" Value="#FFFFFF" />
+      <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
       <Setter Property="Cursor" Value="Hand" />
       <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
       <Setter Property="CornerRadius" Value="8" />
       <Setter Property="Template">
         <ControlTemplate>
           <Border
             Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             CornerRadius="{TemplateBinding CornerRadius}"
             RenderTransformOrigin="0.5,0.5">
@@ -36,19 +38,22 @@
       </Setter>
 
       <Style Selector="^:pointerover /template/ Border">
-        <Setter Property="Background" Value="#DBDBDB" />
+        <Setter Property="Background" Value="{DynamicResource AppAccentTintBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
       </Style>
     </ControlTheme>
 
     <ControlTheme x:Key="TicketButtonTheme" TargetType="Button">
-      <Setter Property="Background" Value="#EEF0F2" />
+      <Setter Property="Background" Value="{DynamicResource AppSurfaceAltBrush}" />
       <Setter Property="Cursor" Value="Hand" />
       <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBorderBrush}" />
       <Setter Property="CornerRadius" Value="8" />
       <Setter Property="Template">
         <ControlTemplate>
           <Border
             Background="{TemplateBinding Background}"
+            BorderBrush="{TemplateBinding BorderBrush}"
             BorderThickness="{TemplateBinding BorderThickness}"
             CornerRadius="{TemplateBinding CornerRadius}">
             <Border.Transitions>
@@ -67,17 +72,19 @@
       </Setter>
 
       <Style Selector="^:pointerover /template/ Border">
-        <Setter Property="Background" Value="#DBDBDB" />
+        <Setter Property="Background" Value="{DynamicResource AppAccentTintBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppAccentBrush}" />
       </Style>
     </ControlTheme>
   </UserControl.Resources>
 
   <UserControl.DataTemplates>
     <DataTemplate x:DataType="vm:BoardCardViewModel">
-      <Grid Margin="0,0,0,8" ColumnDefinitions="*,Auto" ColumnSpacing="6">
+      <Grid Margin="0,0,0,8" ColumnDefinitions="*,Auto" ColumnSpacing="6" HorizontalAlignment="Stretch">
         <Button Grid.Column="0"
                 Padding="10"
                 Theme="{StaticResource TicketButtonTheme}"
+                HorizontalAlignment="Stretch"
                 x:CompileBindings="False"
                 Command="{Binding DataContext.CardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                 CommandParameter="{Binding}">
@@ -87,7 +94,7 @@
           </StackPanel>
         </Button>
 
-        <StackPanel Grid.Column="1" Spacing="6" VerticalAlignment="Center">
+        <StackPanel Grid.Column="1" Width="30" Spacing="6" VerticalAlignment="Center">
           <Button Width="30"
                   Height="30"
                   Padding="0"
@@ -130,7 +137,7 @@
     </DataTemplate>
 
     <DataTemplate x:DataType="vm:BoardColumnViewModel">
-      <Border Width="280" Background="#FFFFFF" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,12,0">
+      <Border Width="280" Background="{DynamicResource AppSurfaceBrush}" BorderBrush="{DynamicResource AppBorderBrush}" BorderThickness="1" CornerRadius="10" Padding="12" Margin="0,0,12,0">
         <DockPanel LastChildFill="True">
           <StackPanel DockPanel.Dock="Top" Spacing="8">
             <DockPanel LastChildFill="False">
@@ -143,14 +150,15 @@
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       Content="✕"
+                      Classes="destructive"
                       Command="{Binding DataContext.DeleteColumnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                       CommandParameter="{Binding}" />
             </DockPanel>
           </StackPanel>
 
           <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,10">
-            <StackPanel>
-              <ItemsControl ItemsSource="{Binding Cards}">
+            <Grid RowDefinitions="Auto,Auto" HorizontalAlignment="Stretch">
+              <ItemsControl Grid.Row="0" ItemsSource="{Binding Cards}" HorizontalAlignment="Stretch">
                 <ItemsControl.ItemsPanel>
                   <ItemsPanelTemplate>
                     <StackPanel />
@@ -158,18 +166,23 @@
                 </ItemsControl.ItemsPanel>
               </ItemsControl>
 
-              <Button MinHeight="40"
-                      Margin="0,0,0,8"
-                      HorizontalAlignment="Stretch"
-                      Padding="10,8"
-                      HorizontalContentAlignment="Center"
-                      Theme="{StaticResource DashboardLikeButtonTheme}"
-                      Background="#EEF0F2"
-                      Content="+ Ajouter un ticket"
-                      x:CompileBindings="False"
-                      Command="{Binding DataContext.AddCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                      CommandParameter="{Binding}" />
-            </StackPanel>
+              <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="6" HorizontalAlignment="Stretch">
+                <Button Grid.Column="0"
+                        MinHeight="40"
+                        Margin="0,0,0,8"
+                        HorizontalAlignment="Stretch"
+                        Padding="10,8"
+                        HorizontalContentAlignment="Center"
+                        Theme="{StaticResource DashboardLikeButtonTheme}"
+                        Background="{DynamicResource AppSurfaceAltBrush}"
+                        Content="+ Ajouter un ticket"
+                        x:CompileBindings="False"
+                        Command="{Binding DataContext.AddCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding}" />
+
+                <Border Grid.Column="1" Width="30" />
+              </Grid>
+            </Grid>
           </ScrollViewer>
         </DockPanel>
       </Border>
@@ -178,16 +191,22 @@
 
   <Border Padding="16">
     <DockPanel LastChildFill="True">
-      <StackPanel DockPanel.Dock="Top" Spacing="8">
-        <DockPanel LastChildFill="False">
-          <TextBlock DockPanel.Dock="Left" FontSize="22" FontWeight="Bold" Text="{Binding ProjectName}" />
-          <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" IsVisible="{Binding HasProject}">
-            <Button Content="Modifier" Command="{Binding EditProjectCommand}" />
-            <Button Content="Supprimer" Command="{Binding DeleteProjectCommand}" />
-          </StackPanel>
-        </DockPanel>
-        <TextBlock Text="{Binding ProjectDescription}" TextWrapping="Wrap" />
-      </StackPanel>
+      <Border DockPanel.Dock="Top" CornerRadius="10" ClipToBounds="True" Padding="16" MinHeight="140">
+        <Border.Background>
+          <ImageBrush Source="{Binding ProjectImage}" Stretch="UniformToFill" />
+        </Border.Background>
+
+        <StackPanel Spacing="8">
+          <DockPanel LastChildFill="False">
+            <TextBlock DockPanel.Dock="Left" FontSize="22" FontWeight="Bold" Text="{Binding ProjectName}" />
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8" IsVisible="{Binding HasProject}">
+              <Button Content="Modifier" Command="{Binding EditProjectCommand}" />
+              <Button Classes="destructive" Content="Supprimer" Command="{Binding DeleteProjectCommand}" />
+            </StackPanel>
+          </DockPanel>
+          <TextBlock Text="{Binding ProjectDescription}" TextWrapping="Wrap" />
+        </StackPanel>
+      </Border>
 
       <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Margin="0,14,0,0">
         <StackPanel Orientation="Horizontal">

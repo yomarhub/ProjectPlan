@@ -6,19 +6,19 @@
         Width="520"
         Height="420"
         CanResize="False"
-        Background="#EEF0F2"
+        Background="{DynamicResource AppBackgroundBrush}"
         Title="Ticket">
 
   <Border Padding="16">
     <DockPanel LastChildFill="True">
       <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="False">
         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="8">
-          <Button IsVisible="{Binding IsEditMode}" Command="{Binding DeleteCommand}">Supprimer</Button>
+          <Button Classes="destructive" IsVisible="{Binding IsEditMode}" Command="{Binding DeleteCommand}">Supprimer</Button>
         </StackPanel>
 
         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
           <Button Command="{Binding CancelCommand}">Annuler</Button>
-          <Button Command="{Binding SaveCommand}">Enregistrer</Button>
+          <Button Classes="primary" Command="{Binding SaveCommand}">Enregistrer</Button>
         </StackPanel>
       </DockPanel>
 
