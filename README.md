@@ -113,9 +113,9 @@ Guide pas-à-pas pour qu'un développeur puisse lancer votre projet.
 
 ```bash
 # Cloner le dépôt
-git clone https://github.com/votre-user/votre-projet.git
+git clone https://github.com/yomarhub/ProjectPlan
 
-cd votre-projet
+cd ProjectPlan
 
 # Restaurer les dépendances
 dotnet restore
@@ -129,9 +129,7 @@ dotnet run
 
 ---
 
-## Section IA & Méthodologie (OBLIGATOIRE)
-
-_Transparence totale requise sur l'usage de l'IA (ChatGPT, Copilot, Gemini)._ 
+## Section IA & Méthodologie
 
 ### 1. Prompts Utilisés
 - "Comment implémenter une navigation simple MVVM dans Avalonia (ContentControl + ViewLocator) ?" -> Mise en place de la navigation.
