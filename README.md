@@ -1,8 +1,8 @@
 # ProjectPlan
 
 ## Auteurs
-* **Omar YASSINE** - [yomarhub · GitHub](https://github.com/yomarhub)
-* **Clément RAMOS** - [clement-ramos · GitHub](https://github.com/clement-ramos)
+* **Omar YASSINE** - (Rôle : Dev Backend) - [yomarhub · GitHub](https://github.com/yomarhub)
+* **Clément RAMOS** - (Rôle : UI/UX Designer + Dev Backend) - [clement-ramos · GitHub](https://github.com/clement-ramos)
 
 ---
 
@@ -12,11 +12,15 @@
 **Description détaillée :**
 ProjectPlan est une application de bureau (Windows/macOS/Linux) développée avec **Avalonia UI** dont l’objectif est de proposer un **Kanban local**, inspiré de Trello, pour gérer ses tâches **en local** (sans collaboration en temps réel et sans backend). L’idée est de pouvoir créer un ou plusieurs tableaux, y organiser des listes (colonnes) et des cartes (tâches), puis déplacer les cartes pour suivre l’avancement.
 
-> ⚠️ **État actuel du projet :** l’application contient surtout une base d’interface (navigation, dashboard) et un flux de création d’élément avec image. Les fonctionnalités Kanban (listes/cartes, drag & drop, sauvegarde locale) sont à implémenter.
-
 ### Fonctionnalités Clés
 
-To Complete
+- Visualisation des projets dans un dashboard
+- Création de projects avec des colonnes par défaut ("Backlog", "To Do", "In Progress", "Done")
+- Création de tâches dans n'importe quelle colonne
+- Déplacement des tâches selon l'avancement
+- Réduction de l'application dans la zone de notification (tray icon)
+- Fermeture/Ouverture de l'app depuis la zone de notification (clique droit)
+
 ## Conception & Design
 > Lien vers la maquette complète.
 > **[Voir la maquette sur Figma](https://www.figma.com/design/ihkBEva17vLyZCR2WKLMkK/ProjectPlan?node-id=0-1&t=20UBtoOh2cq15HFe-1)**
@@ -84,14 +88,17 @@ erDiagram
 * **Framework UI :** Avalonia UI 11.3.12 (Desktop)
 * **Architecture :** MVVM (CommunityToolkit.Mvvm)
 * **Runtime :** .NET `net10.0`
-* **Outils :** VS Code / JetBrains Rider (au choix), Git/GitHub, Figma ou Penpot
+* **Outils :** VS Code / JetBrains Rider, Git/GitHub, Figma
 
 ---
 
 ## Démonstration 
 
 
-To Complete
+![Empty Dashboard](Assets/dashboard_empty.png)
+![Dashboard](Assets/dashboard.png)
+![Project](Assets/project.png)
+![New Task](Assets/new_task.png)
 
 ---
 

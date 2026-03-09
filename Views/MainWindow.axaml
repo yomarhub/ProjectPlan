@@ -3,7 +3,9 @@
         xmlns:vm="using:ProjectPlan.ViewModels"
         x:Class="ProjectPlan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Background="{DynamicResource AppBackgroundBrush}">
+        Background="{DynamicResource AppBackgroundBrush}"
+        Icon="/Assets/Icons/appicon.ico"
+        Title="ProjectPlan">
   <DockPanel>
     <DockPanel DockPanel.Dock="Left" Width="64" Background="{DynamicResource AppSurfaceBrush}" LastChildFill="False">
       <DockPanel.Resources>
