@@ -61,7 +61,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task CreateNewProject()
     {
-        var project = await ProjectService.CreateProjectAsync(
+        var project = await DataFunctions.CreateProjectAsync(
             name: $"Nouveau projet {DateTime.Now:yyyy-MM-dd HH:mm}",
             description: null,
             thumbnailPath: null,
@@ -78,7 +78,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ? $"Nouveau projet {DateTime.Now:yyyy-MM-dd HH:mm}"
             : result.Title.Trim();
 
-        var project = await ProjectService.CreateProjectAsync(
+        var project = await DataFunctions.CreateProjectAsync(
             name: title,
             description: result.Description,
             thumbnailPath: result.ImagePath,

@@ -11,21 +11,20 @@ public partial class ColumnDialog : Window
     public ColumnDialog()
     {
         InitializeComponent();
+
+        _vm.RequestClose += OnRequestClose;
+        Closed += (_, _) => _vm.RequestClose -= OnRequestClose;
+
         DataContext = _vm;
+    }
+
+    private void OnRequestClose(ColumnDialogResult result)
+    {
+        Close(result);
     }
 
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
-    }
-
-    private void Cancel_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        Close(new ColumnDialogResult(ColumnDialogAction.Cancel, string.Empty));
-    }
-
-    private void Create_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        Close(new ColumnDialogResult(ColumnDialogAction.Create, (_vm.Name ?? string.Empty).Trim()));
     }
 }

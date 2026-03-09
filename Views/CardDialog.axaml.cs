@@ -22,29 +22,19 @@ public partial class CardDialog : Window
             Description = description ?? string.Empty,
         };
 
+        _vm.RequestClose += OnRequestClose;
+        Closed += (_, _) => _vm.RequestClose -= OnRequestClose;
+
         DataContext = _vm;
+    }
+
+    private void OnRequestClose(CardDialogResult result)
+    {
+        Close(result);
     }
 
     private void InitializeComponent()
     {
         AvaloniaXamlLoader.Load(this);
-    }
-
-    private void Cancel_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        Close(new CardDialogResult(CardDialogAction.Cancel, string.Empty, string.Empty));
-    }
-
-    private void Save_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        Close(new CardDialogResult(
-            CardDialogAction.Save,
-            (_vm.Title ?? string.Empty).Trim(),
-            (_vm.Description ?? string.Empty).Trim()));
-    }
-
-    private void Delete_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        Close(new CardDialogResult(CardDialogAction.Delete, string.Empty, string.Empty));
     }
 }

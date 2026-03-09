@@ -74,7 +74,8 @@
               Padding="10"
               Theme="{StaticResource TicketButtonTheme}"
               x:CompileBindings="False"
-              Click="Card_Click">
+              Command="{Binding DataContext.CardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+              CommandParameter="{Binding}">
         <StackPanel Spacing="4">
           <TextBlock FontWeight="Bold" Text="{Binding Title}" />
           <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
@@ -92,10 +93,12 @@
                       Width="30"
                       Height="30"
                       Padding="0"
+                      x:CompileBindings="False"
                       HorizontalContentAlignment="Center"
                       VerticalContentAlignment="Center"
                       Content="✕"
-                      Click="DeleteColumn_Click" />
+                      Command="{Binding DataContext.DeleteColumnCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                      CommandParameter="{Binding}" />
             </DockPanel>
                 <Button MinHeight="40"
                     HorizontalAlignment="Stretch"
@@ -103,7 +106,9 @@
                     HorizontalContentAlignment="Center"
                     Theme="{StaticResource DashboardLikeButtonTheme}"
                     Content="+ Ajouter un ticket"
-                    Click="AddCard_Click" />
+                    x:CompileBindings="False"
+                    Command="{Binding DataContext.AddCardCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                    CommandParameter="{Binding}" />
           </StackPanel>
 
           <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,10,0,10">
@@ -128,7 +133,7 @@
           <Button DockPanel.Dock="Right"
                   IsVisible="{Binding HasProject}"
                   Content="Supprimer"
-                  Click="DeleteProject_Click" />
+              Command="{Binding DeleteProjectCommand}" />
         </DockPanel>
         <TextBlock Text="{Binding ProjectDescription}" TextWrapping="Wrap" />
       </StackPanel>
@@ -150,7 +155,7 @@
                   VerticalContentAlignment="Center"
                   Theme="{StaticResource DashboardLikeButtonTheme}"
                   Content="+ Ajouter une colonne"
-                  Click="AddColumn_Click" />
+                  Command="{Binding AddColumnCommand}" />
         </StackPanel>
       </ScrollViewer>
     </DockPanel>

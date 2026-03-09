@@ -5,12 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using CommunityToolkit.Mvvm.Input;
 using ProjectPlan.Infrastructure;
 using ProjectPlan.Models;
 using ProjectPlan.Services;
+using ProjectPlan.Views;
 
 namespace ProjectPlan.ViewModels;
 
@@ -41,6 +46,11 @@ public sealed class DashboardAddCard : IDashboardTile
 public partial class DashboardViewModel : ViewModelBase
 {
     public string Title { get; } = "Dashboard";
+
+    private static Window? GetMainWindow()
+    {
+        return (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
+    }
 
     private static IImage LoadImageOrFallback(string assetUri, IImage fallback)
     {
@@ -121,7 +131,7 @@ public partial class DashboardViewModel : ViewModelBase
     {
         await Context.EnsureDatabaseCreated();
 
-        var projects = await ProjectService.GetProjectsAsync(cancellationToken);
+        var projects = await DataFunctions.GetProjectsAsync(cancellationToken);
 
         Tiles.Clear();
 
@@ -135,5 +145,24 @@ public partial class DashboardViewModel : ViewModelBase
         }
 
         Tiles.Add(new DashboardAddCard());
+    }
+
+    [RelayCommand]
+    private async Task AddProjectAsync()
+    {
+        var window = GetMainWindow();
+        if (window?.DataContext is not MainWindowViewModel mainVm)
+            return;
+
+        var dialog = new CreateProjectDialog
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var result = await dialog.ShowDialog<CreateProjectResult?>(window);
+        if (result is null)
+            return;
+
+        await mainVm.CreateNewProjectAsync(result);
     }
 }

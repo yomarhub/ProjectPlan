@@ -7,9 +7,14 @@ using ProjectPlan.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.Input;
+using ProjectPlan.Views;
 
 namespace ProjectPlan.ViewModels;
 
@@ -44,6 +49,11 @@ public partial class ProjectViewModel : ViewModelBase
         _projectImage = LoadDefaultImage();
     }
 
+    private static Window? GetMainWindow()
+    {
+        return (Application.Current?.ApplicationLifetime as IClassicDesktopStyleApplicationLifetime)?.MainWindow;
+    }
+
     private static IImage? LoadDefaultImage()
     {
         try
@@ -76,7 +86,7 @@ public partial class ProjectViewModel : ViewModelBase
 
     public async Task LoadProjectAsync(int projectId, CancellationToken cancellationToken = default)
     {
-        var project = await ProjectService.GetProjectAsync(projectId, cancellationToken);
+        var project = await DataFunctions.GetProjectAsync(projectId, cancellationToken);
         if (project is null)
         {
             ProjectId = null;
@@ -97,7 +107,7 @@ public partial class ProjectViewModel : ViewModelBase
 
     private async Task LoadBoardAsync(int projectId, CancellationToken cancellationToken)
     {
-        var columns = await ProjectService.GetBoardColumnsAsync(projectId, cancellationToken);
+        var columns = await DataFunctions.GetBoardColumnsAsync(projectId, cancellationToken);
 
         Columns.Clear();
 
@@ -114,5 +124,148 @@ public partial class ProjectViewModel : ViewModelBase
         }
     }
 
+    [RelayCommand]
+    private async Task DeleteProjectAsync()
+    {
+        if (ProjectId is null)
+            return;
 
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var confirm = new ConfirmDeleteProjectDialog(ProjectName)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var shouldDelete = await confirm.ShowDialog<bool>(window);
+        if (!shouldDelete)
+            return;
+
+        var deleted = await DataFunctions.DeleteProjectAsync(ProjectId.Value);
+        if (!deleted)
+            return;
+
+        if (window.DataContext is MainWindowViewModel mainVm)
+            await mainVm.ShowDashboardAndRefreshAsync();
+    }
+
+    [RelayCommand]
+    private async Task AddColumnAsync()
+    {
+        if (ProjectId is null)
+            return;
+
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var dialog = new ColumnDialog
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var result = await dialog.ShowDialog<ColumnDialogResult?>(window);
+        if (result is null || result.Action != ColumnDialogAction.Create)
+            return;
+
+        if (string.IsNullOrWhiteSpace(result.Name))
+            return;
+
+        var column = await DataFunctions.CreateColumnAsync(ProjectId.Value, result.Name, color: null);
+        Columns.Add(new BoardColumnViewModel(column.Id, column.Name));
+    }
+
+    [RelayCommand]
+    private async Task DeleteColumnAsync(BoardColumnViewModel? columnVm)
+    {
+        if (columnVm is null)
+            return;
+
+        var deleted = await DataFunctions.DeleteColumnAsync(columnVm.Id);
+        if (!deleted)
+            return;
+
+        Columns.Remove(columnVm);
+    }
+
+    [RelayCommand]
+    private async Task AddCardAsync(BoardColumnViewModel? columnVm)
+    {
+        if (columnVm is null)
+            return;
+
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var dialog = new CardDialog(isEditMode: false)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var result = await dialog.ShowDialog<CardDialogResult?>(window);
+        if (result is null || result.Action != CardDialogAction.Save)
+            return;
+
+        if (string.IsNullOrWhiteSpace(result.Title))
+            return;
+
+        var card = await DataFunctions.CreateCardAsync(
+            columnId: columnVm.Id,
+            title: result.Title,
+            description: result.Description,
+            color: null);
+
+        columnVm.Cards.Add(new BoardCardViewModel(card.Id, columnVm.Id, card.Title, card.Description));
+    }
+
+    [RelayCommand]
+    private async Task CardAsync(BoardCardViewModel? cardVm)
+    {
+        if (cardVm is null)
+            return;
+
+        var columnVm = Columns.FirstOrDefault(c => c.Id == cardVm.ColumnId);
+        if (columnVm is null)
+            return;
+
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var dialog = new CardDialog(isEditMode: true, title: cardVm.Title, description: cardVm.Description)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var result = await dialog.ShowDialog<CardDialogResult?>(window);
+        if (result is null)
+            return;
+
+        if (result.Action == CardDialogAction.Cancel)
+            return;
+
+        if (result.Action == CardDialogAction.Delete)
+        {
+            var deleted = await DataFunctions.DeleteCardAsync(cardVm.Id);
+            if (deleted)
+                columnVm.Cards.Remove(cardVm);
+            return;
+        }
+
+        if (result.Action == CardDialogAction.Save)
+        {
+            if (string.IsNullOrWhiteSpace(result.Title))
+                return;
+
+            var updated = await DataFunctions.UpdateCardAsync(cardVm.Id, result.Title, result.Description);
+            if (updated is null)
+                return;
+
+            cardVm.Title = updated.Title;
+            cardVm.Description = updated.Description ?? string.Empty;
+        }
+    }
 }
