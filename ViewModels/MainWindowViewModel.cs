@@ -1,23 +1,37 @@
 ﻿namespace ProjectPlan.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ProjectPlan.Services;
+using System;
+using System.Threading.Tasks;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
     public string Greeting { get; } = "Welcome to Avalonia!";
 
-    private readonly DashboardViewModel _dashboard = new();
-    private readonly ProjectViewModel _project = new();
+    private readonly DashboardViewModel _dashboard;
+    private readonly ProjectViewModel _project;
     private readonly SettingsViewModel _settings = new();
-
-    private int _newProjectIndex = 1;
 
     [ObservableProperty]
     private ViewModelBase _currentPage;
 
     public MainWindowViewModel()
     {
+        _dashboard = new DashboardViewModel();
+        _project = new ProjectViewModel();
         _currentPage = _dashboard; // page par défaut
+    }
+
+    public async Task InitializeAsync()
+    {
+        await _dashboard.RefreshAsync();
+    }
+
+    public async Task ShowDashboardAndRefreshAsync()
+    {
+        CurrentPage = _dashboard;
+        await _dashboard.RefreshAsync();
     }
 
     [RelayCommand]
@@ -27,30 +41,51 @@ public partial class MainWindowViewModel : ViewModelBase
     private void ShowProject() => CurrentPage = _project;
 
     [RelayCommand]
-    private void OpenProjectFromCard(DashboardProjectCard card)
+    private async Task OpenProjectFromCard(DashboardProjectCard card)
     {
-        _project.ProjectName = card.Title;
+        if (card.ProjectId <= 0)
+        {
+            // sample tiles (fake data)
+            _project.ProjectId = null;
+            _project.ProjectName = card.Title;
+            _project.ProjectDescription = card.Description;
+            _project.ProjectImage = card.Image;
+            CurrentPage = _project;
+            return;
+        }
+
+        await _project.LoadProjectAsync(card.ProjectId);
         CurrentPage = _project;
     }
 
     [RelayCommand]
-    private void CreateNewProject()
+    private async Task CreateNewProject()
     {
-        _project.ProjectName = $"Nouveau projet {_newProjectIndex++}";
-        _project.ProjectDescription = string.Empty;
-        _project.ProjectImage = null;
+        var project = await ProjectService.CreateProjectAsync(
+            name: $"Nouveau projet {DateTime.Now:yyyy-MM-dd HH:mm}",
+            description: null,
+            thumbnailPath: null,
+            background: null);
+
+        await _dashboard.RefreshAsync();
+        await _project.LoadProjectAsync(project.Id);
         CurrentPage = _project;
     }
 
-    public void CreateNewProject(CreateProjectResult result)
+    public async Task CreateNewProjectAsync(CreateProjectResult result)
     {
         var title = string.IsNullOrWhiteSpace(result.Title)
-            ? $"Nouveau projet {_newProjectIndex++}"
+            ? $"Nouveau projet {DateTime.Now:yyyy-MM-dd HH:mm}"
             : result.Title.Trim();
 
-        _project.ProjectName = title;
-        _project.ProjectDescription = result.Description?.Trim() ?? string.Empty;
-        _project.ProjectImage = result.Image;
+        var project = await ProjectService.CreateProjectAsync(
+            name: title,
+            description: result.Description,
+            thumbnailPath: result.ImagePath,
+            background: null);
+
+        await _dashboard.RefreshAsync();
+        await _project.LoadProjectAsync(project.Id);
         CurrentPage = _project;
     }
 
