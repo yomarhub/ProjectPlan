@@ -95,10 +95,10 @@ erDiagram
 ## Démonstration 
 
 
-![Empty Dashboard](Assets/dashboard_empty.png)
-![Dashboard](Assets/dashboard.png)
-![Project](Assets/project.png)
-![New Task](Assets/new_task.png)
+Empty Dashboard: ![Empty Dashboard](Assets/dashboard_empty.png)
+Dashboard: ![Dashboard](Assets/dashboard.png)
+Project: ![Project](Assets/project.png)
+New Task: ![New Task](Assets/new_task.png)
 
 ---
 
@@ -143,15 +143,15 @@ _Transparence totale requise sur l'usage de l'IA (ChatGPT, Copilot, Gemini)._
 - Gestion des erreurs de chargement d’image (fallback si lecture impossible).
 
 ### 3. Répartition Code IA vs Code Humain
-- **Boilerplate / Config :** _à estimer_
-- **Logique Métier (navigation + flux de création) :** _à estimer_
-- **Interface (UI XAML) :** _à estimer_
+- **Boilerplate / Config :** 100% Humain
+- **Logique Métier (navigation + flux de création) :** 75% Humain
+- **Interface (UI XAML) :** 40% IA
 
-> Note (à personnaliser) : certaines parties ont été assistées avec **GitHub Copilot (GPT-5.2)**, puis revues et ajustées manuellement.
+> Note : certaines parties ont été assistées avec **GitHub Copilot (GPT-5.2)**, puis revues et ajustées manuellement.
 
 ---
 
 ## Auto-Évaluation
-- **Ce qui fonctionne bien :** navigation, dashboard de cartes, création de projet + sélection et preview d’image.
-- **Difficultés rencontrées :** _à compléter_ (ex: bindings XAML, gestion des images, structure MVVM).
-- **Si c'était à refaire :** _à compléter_ (ex: ajouter modèles + persistance dès le début, tests, refactor des services).
+- **Ce qui fonctionne bien :** navigation, dashboard de cartes, création de projet/colonne/tâche + sélection et preview d’image, déplacement des tâches.
+- **Difficultés rencontrées :** structure MVVM, système de notif, drag & drop (task).
+- **Si c'était à refaire :** plus de temps, plus d'animation/dynamisme, ajouter le drag&drop.
