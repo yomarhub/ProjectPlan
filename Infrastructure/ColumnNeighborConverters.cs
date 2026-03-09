@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Avalonia.Data.Converters;
 using ProjectPlan.ViewModels;
 
@@ -13,21 +14,41 @@ public sealed class HasPreviousColumnConverter : IMultiValueConverter
         if (values.Count < 2)
             return false;
 
-        if (values[0] is not ProjectViewModel projectVm)
+        if (!TryGetColumns(values, out var columns))
             return false;
 
-        if (values[1] is not int columnId)
+        if (!TryGetColumnId(values, out var columnId))
             return false;
 
-        var index = IndexOfColumn(projectVm, columnId);
+        var index = IndexOfColumn(columns, columnId);
         return index > 0;
     }
 
-    private static int IndexOfColumn(ProjectViewModel projectVm, int columnId)
+    private static bool TryGetColumns(IList<object?> values, out IReadOnlyList<BoardColumnViewModel> columns)
     {
-        for (var i = 0; i < projectVm.Columns.Count; i++)
+        columns = Array.Empty<BoardColumnViewModel>();
+
+        // Pattern A: (columns, columnId)
+        // Pattern B: (columns, columnsCount, columnId) -> columnsCount is used only to trigger re-evaluation on collection changes.
+        if (values[0] is not IEnumerable<BoardColumnViewModel> enumerable)
+            return false;
+
+        columns = enumerable as IReadOnlyList<BoardColumnViewModel> ?? enumerable.ToList();
+        return true;
+    }
+
+    private static bool TryGetColumnId(IList<object?> values, out int columnId)
+    {
+        columnId = default;
+        var last = values[^1];
+        return last is int id && (columnId = id) >= 0;
+    }
+
+    private static int IndexOfColumn(IReadOnlyList<BoardColumnViewModel> columns, int columnId)
+    {
+        for (var i = 0; i < columns.Count; i++)
         {
-            if (projectVm.Columns[i].Id == columnId)
+            if (columns[i].Id == columnId)
                 return i;
         }
 
@@ -42,21 +63,39 @@ public sealed class HasNextColumnConverter : IMultiValueConverter
         if (values.Count < 2)
             return false;
 
-        if (values[0] is not ProjectViewModel projectVm)
+        if (!TryGetColumns(values, out var columns))
             return false;
 
-        if (values[1] is not int columnId)
+        if (!TryGetColumnId(values, out var columnId))
             return false;
 
-        var index = IndexOfColumn(projectVm, columnId);
-        return index >= 0 && index < projectVm.Columns.Count - 1;
+        var index = IndexOfColumn(columns, columnId);
+        return index >= 0 && index < columns.Count - 1;
     }
 
-    private static int IndexOfColumn(ProjectViewModel projectVm, int columnId)
+    private static bool TryGetColumns(IList<object?> values, out IReadOnlyList<BoardColumnViewModel> columns)
     {
-        for (var i = 0; i < projectVm.Columns.Count; i++)
+        columns = Array.Empty<BoardColumnViewModel>();
+
+        if (values[0] is not IEnumerable<BoardColumnViewModel> enumerable)
+            return false;
+
+        columns = enumerable as IReadOnlyList<BoardColumnViewModel> ?? enumerable.ToList();
+        return true;
+    }
+
+    private static bool TryGetColumnId(IList<object?> values, out int columnId)
+    {
+        columnId = default;
+        var last = values[^1];
+        return last is int id && (columnId = id) >= 0;
+    }
+
+    private static int IndexOfColumn(IReadOnlyList<BoardColumnViewModel> columns, int columnId)
+    {
+        for (var i = 0; i < columns.Count; i++)
         {
-            if (projectVm.Columns[i].Id == columnId)
+            if (columns[i].Id == columnId)
                 return i;
         }
 

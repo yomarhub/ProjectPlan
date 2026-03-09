@@ -81,6 +81,30 @@ public static class DataFunctions
         return project;
     }
 
+    public static async Task<Project?> UpdateProjectAsync(
+        int projectId,
+        string name,
+        string? description,
+        string? thumbnailPath,
+        CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            throw new ArgumentException("Project name is required", nameof(name));
+
+        await using var db = new Context();
+
+        var project = await db.Projects.FirstOrDefaultAsync(p => p.Id == projectId, cancellationToken);
+        if (project is null)
+            return null;
+
+        project.Name = name.Trim();
+        project.Description = string.IsNullOrWhiteSpace(description) ? null : description.Trim();
+        project.Thumbnail = string.IsNullOrWhiteSpace(thumbnailPath) ? null : thumbnailPath;
+
+        await db.SaveChangesAsync(cancellationToken);
+        return project;
+    }
+
     public static async Task<bool> DeleteProjectAsync(int projectId, CancellationToken cancellationToken = default)
     {
         await using var db = new Context();
@@ -242,6 +266,27 @@ public static class DataFunctions
 
         await db.SaveChangesAsync(cancellationToken);
         return card;
+    }
+
+    public static async Task<bool> MoveCardToColumnAsync(
+        int cardId,
+        int newColumnId,
+        CancellationToken cancellationToken = default)
+    {
+        await using var db = new Context();
+
+        var card = await db.Cards.FirstOrDefaultAsync(c => c.Id == cardId, cancellationToken);
+        if (card is null)
+            return false;
+
+        // Basic validation: ensure the target column exists.
+        var columnExists = await db.Columns.AnyAsync(c => c.Id == newColumnId, cancellationToken);
+        if (!columnExists)
+            return false;
+
+        card.IdColumn = newColumnId;
+        await db.SaveChangesAsync(cancellationToken);
+        return true;
     }
 
     public static async Task<bool> DeleteCardAsync(int cardId, CancellationToken cancellationToken = default)
