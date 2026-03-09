@@ -44,11 +44,7 @@ public partial class Context : DbContext
         {
             entity.ToTable("Card");
 
-            entity.HasIndex(e => e.Id, "IX_Card_id").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Color)
                 .HasColumnType(SqlTypeVarchar)
                 .HasColumnName("color");
@@ -59,7 +55,7 @@ public partial class Context : DbContext
             entity.Property(e => e.IdColumn).HasColumnName("id_column");
             entity.Property(e => e.Notify)
                 .IsRequired()
-                .HasDefaultValueSql("false")
+                .HasDefaultValueSql("FALSE")
                 .HasColumnType(SqlTypeBoolean)
                 .HasColumnName("notify");
             entity.Property(e => e.StartDate)
@@ -78,11 +74,7 @@ public partial class Context : DbContext
         {
             entity.ToTable("CardHistory");
 
-            entity.HasIndex(e => e.Id, "IX_CardHistory_id").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.IdCard).HasColumnName("id_card");
             entity.Property(e => e.Text).HasColumnName("text");
             entity.Property(e => e.UpdateTime)
@@ -99,11 +91,7 @@ public partial class Context : DbContext
         {
             entity.ToTable("Column");
 
-            entity.HasIndex(e => e.Id, "IX_Column_id").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Color)
                 .HasColumnType(SqlTypeVarchar)
                 .HasColumnName("color");
@@ -121,11 +109,7 @@ public partial class Context : DbContext
         {
             entity.ToTable("Project");
 
-            entity.HasIndex(e => e.Id, "IX_Project_id").IsUnique();
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Background)
                 .HasColumnType(SqlTypeVarchar)
                 .HasColumnName("background");

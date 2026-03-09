@@ -1,9 +1,3 @@
-using CommunityToolkit.Mvvm.ComponentModel;
-using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using Avalonia.Platform;
-using ProjectPlan.Infrastructure;
-using ProjectPlan.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -13,7 +7,13 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Media;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using ProjectPlan.DataAccess;
+using ProjectPlan.Infrastructure;
 using ProjectPlan.Views;
 
 namespace ProjectPlan.ViewModels;
