@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ProjectPlan.Models;
 
-namespace ProjectPlan.Services;
+namespace ProjectPlan.DataAccess;
 
 public static class DataFunctions
 {
@@ -73,6 +73,13 @@ public static class DataFunctions
             Background = string.IsNullOrWhiteSpace(background) ? null : background,
             CreationDate = DateTime.UtcNow,
             Mute = false,
+            Columns = new List<Column>()
+            {
+                new Column {Name = "Backlog"},
+                new Column {Name = "To Do"},
+                new Column {Name = "In Progress"},
+                new Column {Name = "Done"},
+            }
         };
 
         db.Projects.Add(project);

@@ -6,15 +6,15 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.Input;
+using ProjectPlan.DataAccess;
 using ProjectPlan.Infrastructure;
 using ProjectPlan.Models;
-using ProjectPlan.Services;
 using ProjectPlan.Views;
 
 namespace ProjectPlan.ViewModels;
