@@ -66,11 +66,10 @@ public partial class App : Application
 
     private void OpenApp(object? sender, EventArgs e)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            desktop.MainWindow?.Show();
-            desktop.MainWindow?.WindowState = WindowState.Normal;
-        }
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+        desktop.MainWindow?.Show();
+        desktop.MainWindow?.WindowState = WindowState.Normal;
     }
 
     private void ExitApp(object? sender, EventArgs e)
@@ -83,11 +82,10 @@ public partial class App : Application
 
     private void Toggle(object? sender, EventArgs e)
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            if (desktop.MainWindow == null) return;
-            if (desktop.MainWindow.IsVisible) desktop.MainWindow?.Hide();
-            else desktop.MainWindow?.Show();
-        }
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+        if (desktop.MainWindow == null) return;
+        if (desktop.MainWindow.IsVisible) desktop.MainWindow?.Hide();
+        else OpenApp(sender, e);
     }
 }

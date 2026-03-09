@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 
 namespace ProjectPlan.Views;
@@ -9,9 +10,16 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
-    protected override void OnClosing(WindowClosingEventArgs e)
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
-        e.Cancel = true;
-        this.Hide();
+        base.OnPropertyChanged(change);
+
+        if (change.Property == Window.WindowStateProperty)
+        {
+            if (WindowState == WindowState.Minimized)
+            {
+                Hide(); // send window to tray instead
+            }
+        }
     }
 }
