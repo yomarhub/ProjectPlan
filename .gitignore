@@ -436,4 +436,5 @@ Icon
 
 # ProjectPlan specific files
 *.db
+*.db-*
 TaskFile.yml
