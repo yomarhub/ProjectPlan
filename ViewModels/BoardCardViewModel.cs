@@ -7,14 +7,15 @@ public partial class BoardCardViewModel : ViewModelBase
     public BoardCardViewModel(int id, int columnId, string title, string? description)
     {
         Id = id;
-        ColumnId = columnId;
+        _columnId = columnId;
         _title = title;
         _description = description ?? string.Empty;
     }
 
     public int Id { get; }
 
-    public int ColumnId { get; }
+    [ObservableProperty]
+    private int _columnId;
 
     [ObservableProperty]
     private string _title;

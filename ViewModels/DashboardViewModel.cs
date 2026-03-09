@@ -73,7 +73,7 @@ public partial class DashboardViewModel : ViewModelBase
     }
 
     private static readonly IImage DefaultCardImage = new Bitmap(
-        AssetLoader.Open(AssetUri.For("Assets/avalonia-logo.ico")));
+        AssetLoader.Open(AssetUri.For("Assets/Default.png")));
 
     private static readonly IImage ThalesCardImage = LoadImageOrFallback(
         AssetUri.For("Assets/Thales.png").ToString(),

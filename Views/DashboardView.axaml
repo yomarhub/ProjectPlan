@@ -39,15 +39,15 @@
 
   <UserControl.DataTemplates>
     <DataTemplate x:DataType="vm:DashboardProjectCard">
-      <Button Width="240"
+      <Button Width="300"
               Margin="0,0,12,12"
-              Padding="12"
+              Padding="14"
               Theme="{StaticResource DashboardCardButtonTheme}"
               x:CompileBindings="False"
               Command="{Binding DataContext.OpenProjectFromCardCommand, RelativeSource={RelativeSource AncestorType=Window}}"
               CommandParameter="{Binding .}">
         <StackPanel Spacing="8">
-          <Image Height="120" Source="{Binding Image}" Stretch="Uniform" HorizontalAlignment="Center" />
+          <Image Height="150" Source="{Binding Image}" Stretch="Uniform" HorizontalAlignment="Center" />
           <Separator />
           <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding Title}" TextAlignment="Center" />
           <TextBlock Text="{Binding Description}" TextWrapping="Wrap" />
@@ -56,13 +56,13 @@
     </DataTemplate>
 
     <DataTemplate x:DataType="vm:DashboardAddCard">
-      <Button Width="240"
+      <Button Width="300"
               Margin="0,0,12,12"
-              Padding="12"
+              Padding="14"
               Theme="{StaticResource DashboardCardButtonTheme}"
               x:CompileBindings="False"
               Command="{Binding DataContext.AddProjectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
-        <Grid Height="160">
+        <Grid Height="210">
           <TextBlock Text="+"
                      FontSize="48"
                      FontWeight="Bold"

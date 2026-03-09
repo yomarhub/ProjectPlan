@@ -44,6 +44,9 @@ public partial class ProjectViewModel : ViewModelBase
     [ObservableProperty]
     private IImage? _projectImage;
 
+    [ObservableProperty]
+    private string? _projectThumbnailPath;
+
     public ProjectViewModel()
     {
         _projectImage = LoadDefaultImage();
@@ -58,7 +61,7 @@ public partial class ProjectViewModel : ViewModelBase
     {
         try
         {
-            return new Bitmap(AssetLoader.Open(AssetUri.For("Assets/avalonia-logo.ico")));
+            return new Bitmap(AssetLoader.Open(AssetUri.For("Assets/Default.png")));
         }
         catch
         {
@@ -93,6 +96,7 @@ public partial class ProjectViewModel : ViewModelBase
             ProjectName = "(projet introuvable)";
             ProjectDescription = string.Empty;
             ProjectImage = LoadDefaultImage();
+            ProjectThumbnailPath = null;
             Columns.Clear();
             return;
         }
@@ -100,9 +104,50 @@ public partial class ProjectViewModel : ViewModelBase
         ProjectId = project.Id;
         ProjectName = project.Name;
         ProjectDescription = project.Description ?? string.Empty;
+        ProjectThumbnailPath = project.Thumbnail;
         ProjectImage = LoadImageFromFileOrNull(project.Thumbnail) ?? LoadDefaultImage();
 
         await LoadBoardAsync(project.Id, cancellationToken);
+    }
+
+    [RelayCommand]
+    private async Task EditProjectAsync()
+    {
+        if (ProjectId is null)
+            return;
+
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var dialog = new EditProjectDialog(
+            initialTitle: ProjectName,
+            initialDescription: ProjectDescription,
+            initialImagePath: ProjectThumbnailPath)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var result = await dialog.ShowDialog<EditProjectResult?>(window);
+        if (result is null)
+            return;
+
+        if (string.IsNullOrWhiteSpace(result.Title))
+            return;
+
+        var updated = await DataFunctions.UpdateProjectAsync(
+            ProjectId.Value,
+            name: result.Title,
+            description: result.Description,
+            thumbnailPath: result.ImagePath);
+
+        if (updated is null)
+            return;
+
+        ProjectName = updated.Name;
+        ProjectDescription = updated.Description ?? string.Empty;
+        ProjectThumbnailPath = updated.Thumbnail;
+        ProjectImage = LoadImageFromFileOrNull(updated.Thumbnail) ?? LoadDefaultImage();
     }
 
     private async Task LoadBoardAsync(int projectId, CancellationToken cancellationToken)
@@ -219,6 +264,61 @@ public partial class ProjectViewModel : ViewModelBase
             color: null);
 
         columnVm.Cards.Add(new BoardCardViewModel(card.Id, columnVm.Id, card.Title, card.Description));
+    }
+
+    [RelayCommand]
+    private async Task MoveCardLeftAsync(BoardCardViewModel? cardVm)
+    {
+        if (cardVm is null)
+            return;
+
+        var currentIndex = IndexOfColumn(Columns, cardVm.ColumnId);
+        if (currentIndex <= 0)
+            return;
+
+        var sourceColumnVm = Columns[currentIndex];
+        var targetColumnVm = Columns[currentIndex - 1];
+
+        var moved = await DataFunctions.MoveCardToColumnAsync(cardVm.Id, targetColumnVm.Id);
+        if (!moved)
+            return;
+
+        sourceColumnVm.Cards.Remove(cardVm);
+        targetColumnVm.Cards.Add(cardVm);
+        cardVm.ColumnId = targetColumnVm.Id;
+    }
+
+    [RelayCommand]
+    private async Task MoveCardRightAsync(BoardCardViewModel? cardVm)
+    {
+        if (cardVm is null)
+            return;
+
+        var currentIndex = IndexOfColumn(Columns, cardVm.ColumnId);
+        if (currentIndex < 0 || currentIndex >= Columns.Count - 1)
+            return;
+
+        var sourceColumnVm = Columns[currentIndex];
+        var targetColumnVm = Columns[currentIndex + 1];
+
+        var moved = await DataFunctions.MoveCardToColumnAsync(cardVm.Id, targetColumnVm.Id);
+        if (!moved)
+            return;
+
+        sourceColumnVm.Cards.Remove(cardVm);
+        targetColumnVm.Cards.Add(cardVm);
+        cardVm.ColumnId = targetColumnVm.Id;
+    }
+
+    private static int IndexOfColumn(ObservableCollection<BoardColumnViewModel> columns, int columnId)
+    {
+        for (var i = 0; i < columns.Count; i++)
+        {
+            if (columns[i].Id == columnId)
+                return i;
+        }
+
+        return -1;
     }
 
     [RelayCommand]
