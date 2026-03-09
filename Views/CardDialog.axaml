@@ -1,0 +1,47 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ProjectPlan.ViewModels"
+        x:Class="ProjectPlan.Views.CardDialog"
+        x:DataType="vm:CardDialogViewModel"
+        Width="520"
+        Height="420"
+        CanResize="False"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Title="Ticket">
+
+  <Border Padding="16">
+    <DockPanel LastChildFill="True">
+      <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="False">
+        <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" Spacing="8">
+          <Button Classes="destructive" IsVisible="{Binding IsEditMode}" Command="{Binding DeleteCommand}">Supprimer</Button>
+        </StackPanel>
+
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+          <Button Command="{Binding CancelCommand}">Annuler</Button>
+          <Button Classes="primary" Command="{Binding SaveCommand}">Enregistrer</Button>
+        </StackPanel>
+      </DockPanel>
+
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+        <StackPanel Spacing="12">
+          <TextBlock FontSize="20" FontWeight="Bold" Text="Créer un ticket" IsVisible="{Binding IsCreateMode}" />
+          <TextBlock FontSize="20" FontWeight="Bold" Text="Modifier le ticket" IsVisible="{Binding IsEditMode}" />
+
+          <StackPanel Spacing="6">
+            <TextBlock Text="Titre" />
+            <TextBox Text="{Binding Title}" Watermark="Ex: Implémenter la feature X" />
+          </StackPanel>
+
+          <StackPanel Spacing="6">
+            <TextBlock Text="Description" />
+            <TextBox Text="{Binding Description}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     Height="200"
+                     Watermark="Détails du ticket..." />
+          </StackPanel>
+        </StackPanel>
+      </ScrollViewer>
+    </DockPanel>
+  </Border>
+</Window>

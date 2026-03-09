@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ProjectPlan.ViewModels"
+        x:Class="ProjectPlan.Views.ColumnDialog"
+        x:DataType="vm:ColumnDialogViewModel"
+        Width="420"
+        Height="220"
+        CanResize="False"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Title="Créer une colonne">
+
+  <Border Padding="16">
+    <DockPanel LastChildFill="True">
+      <DockPanel DockPanel.Dock="Bottom" Margin="0,8,0,0" LastChildFill="False">
+        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+          <Button Command="{Binding CancelCommand}">Annuler</Button>
+          <Button Classes="primary" Command="{Binding CreateCommand}">Créer</Button>
+        </StackPanel>
+      </DockPanel>
+
+      <StackPanel Spacing="10">
+        <TextBlock FontSize="20" FontWeight="Bold" Text="Créer une colonne" />
+        <StackPanel Spacing="6">
+          <TextBlock Text="Nom" />
+          <TextBox Text="{Binding Name}" Watermark="Ex: À faire" />
+        </StackPanel>
+      </StackPanel>
+    </DockPanel>
+  </Border>
+</Window>

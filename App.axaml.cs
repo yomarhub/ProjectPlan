@@ -1,9 +1,12 @@
+using System;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using System.Linq;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using MsBox.Avalonia;
 using ProjectPlan.ViewModels;
 using ProjectPlan.Views;
 
@@ -23,16 +26,32 @@ public partial class App : Application
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
-            {
-                DataContext = new MainWindowViewModel(),
-            };
+            var mainVm = new MainWindowViewModel();
+            desktop.MainWindow = new MainWindow { DataContext = mainVm };
+
+            _ = InitializeAsync(mainVm);
         }
 
         base.OnFrameworkInitializationCompleted();
     }
 
-    private void DisableAvaloniaDataAnnotationValidation()
+    private static async System.Threading.Tasks.Task InitializeAsync(MainWindowViewModel mainVm)
+    {
+        try
+        {
+            await mainVm.InitializeAsync();
+        }
+        catch (System.Exception ex)
+        {
+            var box = MessageBoxManager.GetMessageBoxStandard(
+                "Erreur",
+                "Impossible d'initialiser la base de données.\n\n" + ex.Message);
+
+            await box.ShowAsync();
+        }
+    }
+
+    private static void DisableAvaloniaDataAnnotationValidation()
     {
         // Get an array of plugins to remove
         var dataValidationPluginsToRemove =
@@ -43,5 +62,30 @@ public partial class App : Application
         {
             BindingPlugins.DataValidators.Remove(plugin);
         }
+    }
+
+    private void OpenApp(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+        desktop.MainWindow?.Show();
+        desktop.MainWindow?.WindowState = WindowState.Normal;
+    }
+
+    private void ExitApp(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            desktop.Shutdown();
+        }
+    }
+
+    private void Toggle(object? sender, EventArgs e)
+    {
+        if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
+
+        if (desktop.MainWindow == null) return;
+        if (desktop.MainWindow.IsVisible) desktop.MainWindow?.Hide();
+        else OpenApp(sender, e);
     }
 }

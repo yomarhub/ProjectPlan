@@ -1,20 +1,66 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:ProjectPlan.ViewModels"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="ProjectPlan.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
+        Background="{DynamicResource AppBackgroundBrush}"
+        Icon="/Assets/Icons/appicon.ico"
         Title="ProjectPlan">
+  <DockPanel>
+    <DockPanel DockPanel.Dock="Left" Width="64" Background="{DynamicResource AppSurfaceBrush}" LastChildFill="False">
+      <DockPanel.Resources>
+        <ControlTheme x:Key="NavButtonTheme" TargetType="Button">
+          <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+          <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}" />
+          <Setter Property="Cursor" Value="Hand" />
+          <Setter Property="BorderThickness" Value="0" />
+          <Setter Property="HorizontalAlignment" Value="Center" />
+          <Setter Property="HorizontalContentAlignment" Value="Center" />
+          <Setter Property="VerticalContentAlignment" Value="Center" />
+          <Setter Property="Template">
+            <ControlTemplate>
+              <Border Background="{TemplateBinding Background}">
+                <Border.Transitions>
+                  <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.2" />
+                  </Transitions>
+                </Border.Transitions>
+                <ContentPresenter
+                  Content="{TemplateBinding Content}"
+                  ContentTemplate="{TemplateBinding ContentTemplate}"
+                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                  Padding="{TemplateBinding Padding}" />
+              </Border>
+            </ControlTemplate>
+          </Setter>
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
+          <Style Selector="^:pointerover">
+            <Setter Property="Background" Value="{DynamicResource AppAccentTintBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AppTextBrush}" />
+          </Style>
+        </ControlTheme>
+      </DockPanel.Resources>
 
-    <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+      <DockPanel.Styles>
+        <Style Selector="Button.nav">
+          <Setter Property="Theme" Value="{StaticResource NavButtonTheme}" />
+        </Style>
+      </DockPanel.Styles>
 
+      <Button DockPanel.Dock="Top" Classes="nav"
+              Command="{Binding ShowDashboardCommand}"
+              Padding="8">
+        <Image Width="48" Height="48" Stretch="Uniform" Source="avares://ProjectPlan/Assets/Icons/home.png" />
+      </Button>
+
+      <Button DockPanel.Dock="Bottom" Classes="nav"
+              Command="{Binding ShowSettingsCommand}"
+              Padding="8">
+        <Image Width="48" Height="48" Stretch="Uniform" Source="avares://ProjectPlan/Assets/Icons/settings.png" />
+      </Button>
+    </DockPanel>
+
+    <ContentControl Content="{Binding CurrentPage}" />
+  </DockPanel>
 </Window>
