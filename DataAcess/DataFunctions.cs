@@ -8,7 +8,7 @@ using ProjectPlan.Models;
 
 namespace ProjectPlan.Services;
 
-public static class ProjectService
+public static class DataFunctions
 {
     public static async Task<IReadOnlyList<Project>> GetProjectsAsync(CancellationToken cancellationToken = default)
     {

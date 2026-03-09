@@ -61,7 +61,7 @@
               Padding="12"
               Theme="{StaticResource DashboardCardButtonTheme}"
               x:CompileBindings="False"
-              Click="AddProject_Click">
+              Command="{Binding DataContext.AddProjectCommand, RelativeSource={RelativeSource AncestorType=UserControl}}">
         <Grid Height="160">
           <TextBlock Text="+"
                      FontSize="48"
