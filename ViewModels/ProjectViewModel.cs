@@ -228,6 +228,19 @@ public partial class ProjectViewModel : ViewModelBase
         if (columnVm is null)
             return;
 
+        var window = GetMainWindow();
+        if (window is null)
+            return;
+
+        var confirm = new ConfirmDeleteColumnDialog(columnVm.Name)
+        {
+            WindowStartupLocation = WindowStartupLocation.CenterOwner,
+        };
+
+        var shouldDelete = await confirm.ShowDialog<bool>(window);
+        if (!shouldDelete)
+            return;
+
         var deleted = await DataFunctions.DeleteColumnAsync(columnVm.Id);
         if (!deleted)
             return;
